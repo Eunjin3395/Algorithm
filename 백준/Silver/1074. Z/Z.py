@@ -1,26 +1,24 @@
-def Z(N, r, c):
-    ans = 0
+# 입력 받기
+N, r, c = map(int, input().split())
 
-    while N:
-        N -= 1
 
-        if r < 2**N and c < 2**N:
-            ans = ans
+seq = 0
 
-        elif r < 2**N and c >= 2**N:
-            ans += 2**(2*N)
-            c -= 2**N
 
-        elif r >= 2**N and c < 2**N:
-            ans += 2*(2**(2*N))
-            r -= 2**N
+while(N):
+    N -= 1
+    if r >= 2**N and c >= 2**N:
+        # 오른쪽 아래 구간
+        seq += 3*(2**(2*N))
+        r -= 2**N
+        c -= 2**N
+    elif r >= 2**N and c < 2**N:
+        # 왼쪽 아래 구간
+        seq += 2*(2**(2*N))
+        r -= 2**N
+    elif r < 2**N and c >= 2**N:
+        # 오른쪽 위 구간
+        seq += 2**(2*N)
+        c -= 2**N
 
-        elif r >= 2**N and c >= 2**N:
-            ans += 3*(2**(2*N))
-            r -= 2**N
-            c -= 2**N
-
-    return ans
-
-N,r,c = map(int, input().split())
-print(Z(N,r,c))
+print(seq)
