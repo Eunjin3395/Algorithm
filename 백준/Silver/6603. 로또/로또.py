@@ -1,17 +1,17 @@
-
 choice = []
+arr = []
 
 
-def comb(index, level, K, line):
+def comb(index, level):
     # base case
-    if(level == K):
+    if(level == 6):
         for elem in choice:
             print(elem, end=" ")
         print()
 
-    for i in range(index, len(line)):
-        choice.append(line[i])
-        comb(i+1, level+1, K, line)
+    for i in range(index, len(arr)):
+        choice.append(arr[i])
+        comb(i+1, level+1)
         choice.pop()
 
 
@@ -23,5 +23,5 @@ while True:
     if k == 0:
         break
 
-    comb(0, 0, 6, arr)
+    comb(0, 0)
     print()
