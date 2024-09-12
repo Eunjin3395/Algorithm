@@ -1,18 +1,14 @@
-import sys
+# 입력 받기
+N, K = map(int, input().split())
 
-N,K=map(int, sys.stdin.readline().split())
-A=[0]*N
+arr = []
 
-for i in range(N):
-    A[i]= int (sys.stdin.readline().rstrip())
+for _ in range(N):
+    arr.append(int(input()))
 
+cnt = 0
+for i in range(len(arr)-1, -1, -1):
+    cnt += K//arr[i]
+    K %= arr[i]
 
-count = 0
-
-for i in range(N-1,-1,-1):
-    if A[i]<=K:
-        count+=int(K/A[i])
-        K=K%A[i]
-
-
-print(count)
+print(cnt)
