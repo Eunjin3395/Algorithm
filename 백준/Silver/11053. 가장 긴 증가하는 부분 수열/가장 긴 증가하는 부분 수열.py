@@ -13,7 +13,7 @@ for i in range(1, N):
         if(A[i] > A[x]):
             low_idxs.append(x)
 
-    # print("low_idx:", low_idxs)
+    #print("low_idx:", low_idxs)
 
     if(low_idxs):
         max_dp_idx = low_idxs[0]
@@ -21,13 +21,20 @@ for i in range(1, N):
             if(dp[idx] > dp[max_dp_idx]):
                 max_dp_idx = idx
         # print("i:", i, ", max_dp_idx:", max_dp_idx)
-        if(dp[max_dp_idx] == 0):
-            dp[i] = dp[max_dp_idx]+2
-        else:
-            dp[i] = dp[max_dp_idx]+1
+
+        dp[i] = dp[max_dp_idx]+1
 
         # print("dp list:", list(dp[x] for x in low_idxs))
 
     # print("dp:", dp)
 
+# print(dp)
 print(max(dp))
+
+
+# for i in range(1, N):
+#     for x in range(i):
+#         if(A[i] > A[x]):
+#             dp[i] = max(dp[i], dp[x]+1)
+
+# print(max(dp))
