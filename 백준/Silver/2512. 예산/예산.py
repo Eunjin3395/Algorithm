@@ -13,9 +13,12 @@ while start <= end:
             total += mid
         else:
             total += elem
-    if(total <= M):  # 중앙값을 키워서 찾기
+    if(total < M):  # 중앙값을 키워서 찾기
         result = mid
         start = mid+1
+    elif(total == M):
+        result = mid
+        break
     else:
         end = mid-1
 
