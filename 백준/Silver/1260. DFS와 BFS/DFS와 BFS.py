@@ -1,41 +1,50 @@
-import sys
 from collections import deque
 
-def dfs(graph, v, visited):
-    visited[v]=True
-    print(v,end=" ")
-    for i in graph[v]:
-        if not visited[i]:
-            dfs(graph,i,visited)
+# 입력 받기
+N, M, V = map(int, input().split())
 
-def bfs(graph,start,visited):
-    queue = deque([start])
+adj_list = [[] for _ in range(N+1)]
 
-    visited[start]=True
+for _ in range(M):
+    v1, v2 = map(int, input().split())
+    adj_list[v1].append(v2)
+    adj_list[v2].append(v1)
 
-    while(queue):
-        v = queue.popleft()
-        print(v,end=" ")
+# print(adj_list)
 
-        for i in graph[v]:
-            if not visited[i]:
-                queue.append(i)
-                visited[i]=True
+dfs_visited = [False]*(N+1)
 
 
-N,M,V = map(int,sys.stdin.readline().rstrip().split())
-graph = [ [] for _ in range(N+1) ]
-graph[0]=[]
-visited_dfs=[False]*(N+1)
-visited_bfs=[False]*(N+1)
+def dfs(node):
+    global adj_list, dfs_visited
 
-for i in range(M):
-    v1,v2 = map(int,sys.stdin.readline().rstrip().split())
-    graph[v1].append(v2)
-    graph[v2].append(v1)
-for elem in graph:
-    elem.sort();
+    if(dfs_visited[node]):
+        return
 
-dfs(graph,V,visited_dfs)
+    dfs_visited[node] = True
+    print(node, end=" ")
+
+    for adj_node in sorted(adj_list[node]):
+        dfs(adj_node)
+
+
+def bfs(start):
+    q = deque()
+
+    q.append(start)
+    bfs_visited = [False]*(N+1)
+    bfs_visited[start] = True
+    while q:
+        node = q.popleft()
+        print(node, end=" ")
+
+        for adj_node in sorted(adj_list[node]):
+            if(bfs_visited[adj_node]):
+                continue
+            q.append(adj_node)
+            bfs_visited[adj_node] = True
+
+
+dfs(V)
 print()
-bfs(graph,V,visited_bfs)
+bfs(V)
