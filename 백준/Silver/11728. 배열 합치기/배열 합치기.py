@@ -1,15 +1,16 @@
-import sys
+# 입력 받기
+N, M = map(int, input().split())
 
-N,M = map(int,sys.stdin.readline().rstrip().split())
+A = list(map(int, input().split()))
+B = list(map(int, input().split()))
 
-result=[]
+result = []
+for elem in A:
+    result.append(elem)
 
-a = list(map(int,sys.stdin.readline().split()))
-b= list(map(int,sys.stdin.readline().split()))
+for elem in B:
+    result.append(elem)
 
-result+=a
-result+=b
 result.sort()
-
 for elem in result:
-    print(elem,end=" ")
+    print(elem, end=" ")
