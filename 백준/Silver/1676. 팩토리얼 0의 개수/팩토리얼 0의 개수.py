@@ -1,18 +1,26 @@
 import sys
+sys.setrecursionlimit(10000)
 
-def factorial(n):
-    if(n<=1):
+
+# 입력 받기
+N = int(input())
+
+
+def fact(n):
+    if n <= 1:
         return 1
-    return factorial(n-1)*n
+    return n*fact(n-1)
 
-N=int(sys.stdin.readline())
-fact = factorial(N)
-fact_list = list(map(int,str(fact)))
-count=0
-for i in reversed(range(len(fact_list))):
-    if(fact_list[i]==0):
-        count+=1
-    else:
+
+num = str(fact(N))
+
+result = 0
+
+#print("num:", num)
+
+for i in range(len(num)-1, -1, -1):
+    if num[i] != "0":
         break
+    result += 1
 
-print(count)
+print(result)
