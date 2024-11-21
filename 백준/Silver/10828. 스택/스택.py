@@ -1,53 +1,26 @@
 import sys
+input = sys.stdin.readline
 
+# 입력 받기
+N = int(input())
 
-class Stack:
-    def __init__(self):
-        self.stack=[]
-    
-    def push(self,x):
-        self.stack.append(x)
+arr = []
 
-    def pop(self):
-        if not self.stack:
-            top=-1
-        else:
-            top = self.stack.pop()
-        return top
-    
-    def top(self):
-        if not self.stack:
-            return -1
-        else:
-            return self.stack[-1]
-        
-    def size(self):
-        return len(self.stack)
-    
-    def empty(self):
-        return (0 if len(self.stack) else 1)
-    
+for _ in range(N):
+    command = input().split()
+    # print("arr:", arr)
 
-stack= Stack()
+    if command[0] == "push":
+        arr.append(command[1])
 
-n=int(sys.stdin.readline())
+    if command[0] == "pop":
+        print(arr.pop()) if arr else print(-1)
 
-for i in range(n):
-    command = sys.stdin.readline()
+    if command[0] == "size":
+        print(len(arr))
 
-    if "push" in command:
-        num = int(command.split()[1])
-        stack.push(num)
-    
-    if "pop" in command:
-        result = stack.pop()
-        print(result)
-    
-    if "top" in command:
-        print(stack.top())
+    if command[0] == "empty":
+        print(0) if arr else print(1)
 
-    if "size" in command:
-        print(stack.size())
-
-    if "empty" in command:
-        print(stack.empty())
+    if command[0] == "top":
+        print(arr[-1]) if arr else print(-1)
