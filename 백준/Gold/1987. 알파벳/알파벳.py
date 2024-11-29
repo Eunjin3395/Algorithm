@@ -14,21 +14,12 @@ dx = [0, -1, 0, 1]
 # 최대 이동 거리
 max_depth = 0
 
-# 방문 상태 저장 (중복 계산 방지)
-visited_states = set()
-
 
 def dfs(y, x, depth):
     global matrix, visited, max_depth, R, C
     # print("dfs called:", y, x, depth)
 
     max_depth = max(max_depth, depth)
-
-    # 현재 상태를 저장
-    state = (y, x, tuple(visited))
-    if state in visited_states:
-        return
-    visited_states.add(state)
 
     # 다음 노드 방문
     for i in range(4):
