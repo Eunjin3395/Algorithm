@@ -1,6 +1,3 @@
-import sys
-input = sys.stdin.readline
-
 M, N = map(int, input().split())
 
 matrix = [[1 for _ in range(M)] for _ in range(M)]
