@@ -13,6 +13,8 @@ for _ in range(T):
         drop.append([0, 1])
 
 dp[1][0][0] = drop[1][0]
+# 틀린 초기화 부분
+# dp[1][1][0] = drop[1][1]
 dp[1][1][1] = drop[1][1]
 
 # x가 0인 경우
@@ -29,20 +31,18 @@ dp[1][1][1] = drop[1][1]
 
 for y in range(2, T+1):
     for x in range(2):
-        for z in range(min(y, W+1)):
+        for z in range(W+1):
             if x == 0:
                 if z == 0:
                     dp[y][x][z] = dp[y-1][0][0] + drop[y][0]
                 else:
-                    dp[y][x][z] = max(dp[y-1][0][z], dp[y-1]
-                                      [1][z-1]) + drop[y][0]
+                    dp[y][x][z] = max(dp[y-1][0][z], dp[y-1][1][z-1]) + drop[y][0]
 
             if x == 1:
                 if z == 0:
                     dp[y][x][z] = dp[y-1][1][0] + drop[y][1]
                 else:
-                    dp[y][x][z] = max(dp[y-1][1][z], dp[y-1]
-                                      [0][z-1]) + drop[y][1]
+                    dp[y][x][z] = max(dp[y-1][1][z], dp[y-1][0][z-1]) + drop[y][1]
 
 
 # for y in range(T+1):
