@@ -34,9 +34,7 @@ M, N = map(int, input().split())
 matrix = [list(map(int, list(input().strip()))) for _ in range(N)]
 dist = [[INF]*M for _ in range(N)]
 
-if M == 1 and N == 1:
-    print(0)
-    exit()
+dist[0][0] = 0
 
 bfs(0, 0)
 
