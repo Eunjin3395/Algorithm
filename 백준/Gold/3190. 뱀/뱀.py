@@ -1,22 +1,4 @@
 from collections import deque
-N = int(input())
-K = int(input())
-
-matrix = [[0]*N for _ in range(N)]
-for _ in range(K):
-    y, x = map(int, input().split())
-    matrix[y-1][x-1] = 1
-
-L = int(input())
-rotate_list = [[] for _ in range(10001)]
-for _ in range(L):
-    x, c = input().split()
-    rotate_list[int(x)].append(c)
-
-matrix[0][0] = -1
-d = 1  # 뱀의 방향
-snake = deque()  # 뱀의 좌표 deque
-snake.append((0, 0))
 
 # d: 0(상), 1(우), 2(하), 3(좌)
 dy = [-1, 0, 1, 0]
@@ -33,6 +15,25 @@ def rotate(d_input):
         nd = rd[d]
     d = nd
 
+
+N = int(input())
+K = int(input())
+
+matrix = [[0]*N for _ in range(N)]
+for _ in range(K):
+    y, x = map(int, input().split())
+    matrix[y-1][x-1] = 1
+
+L = int(input())
+rotate_list = [[] for _ in range(10001)]
+for _ in range(L):
+    x, c = input().split()
+    rotate_list[int(x)].append(c)
+
+matrix[0][0] = -1
+d = 1  # 뱀의 방향
+snake = deque()  # 뱀의 좌표 덱
+snake.append((0, 0))
 
 for T in range(1, 10001):
     # 머리 좌표 계산
