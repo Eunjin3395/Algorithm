@@ -33,4 +33,3 @@ for i in range(len(time)):
     if time[i] == 1:
         print(i-1)
         exit()
-print(-1)
