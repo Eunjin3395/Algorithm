@@ -1,79 +1,78 @@
 import sys
 from collections import deque
+
+sys.setrecursionlimit(10**6)
 input = sys.stdin.readline
 
 N, M = map(int, input().split())
-
 matrix = [list(map(int, input().split())) for _ in range(N)]
 
 dy = [1, 0, -1, 0]
 dx = [0, 1, 0, -1]
-answer = 0
 
+# 빙산이 있는 좌표만 저장 (초기화)
+icebergs = deque()
+for y in range(N):
+    for x in range(M):
+        if matrix[y][x] > 0:
+            icebergs.append((y, x))
 
-def decrease(y, x):
-    for i in range(4):
-        ny = y+dy[i]
-        nx = x+dx[i]
-        if 0 <= ny < N and 0 <= nx < M:
-            if matrix[ny][nx] == 0:
-                temp[y][x] += 1
+def decrease():
+    """빙산이 녹는 과정 (빙산이 있는 좌표만 갱신)"""
+    global matrix
+    melting = {}  # 빙산이 얼마나 줄어들지를 저장하는 딕셔너리
 
+    for _ in range(len(icebergs)):
+        y, x = icebergs.popleft()
+        count = 0  # 녹는 양
 
-def bfs(y, x):
-    global cnt
-    q = deque()
-    q.append((y, x))
-    cnt += 1
-
-    while q:
-        y, x = q.popleft()
         for i in range(4):
-            ny = y+dy[i]
-            nx = x+dx[i]
-            if 0 <= ny < N and 0 <= nx < M:
-                if matrix[ny][nx] != 0 and not visited[ny][nx]:
-                    q.append((ny, nx))
-                    visited[ny][nx] = True
+            ny, nx = y + dy[i], x + dx[i]
+            if 0 <= ny < N and 0 <= nx < M and matrix[ny][nx] == 0:
+                count += 1
 
+        if count > 0:
+            melting[(y, x)] = count
+        else:
+            icebergs.append((y, x))  # 녹지 않는다면 다시 큐에 추가
 
-temp = [[0 for _ in range(M)] for _ in range(N)]
-year = 0
-while True:
-    cnt = 0
-    year += 1
-    ice_cnt = 0
+    # 실제 빙산 녹이기
+    for (y, x), melt in melting.items():
+        matrix[y][x] -= melt
+        if matrix[y][x] <= 0:
+            matrix[y][x] = 0  # 빙산이 녹아 없어짐
+        else:
+            icebergs.append((y, x))  # 아직 남아있다면 다시 큐에 추가
 
-    visited = [[False]*M for _ in range(N)]
+def bfs(y, x, visited):
+    """BFS로 빙산 덩어리 탐색"""
+    queue = deque([(y, x)])
+    visited[y][x] = True
 
-    for y in range(N):
-        for x in range(M):
-            if matrix[y][x] > 0:
-                ice_cnt += 1
-                decrease(y, x)
+    while queue:
+        cy, cx = queue.popleft()
+        for i in range(4):
+            ny, nx = cy + dy[i], cx + dx[i]
+            if 0 <= ny < N and 0 <= nx < M and not visited[ny][nx] and matrix[ny][nx] > 0:
+                visited[ny][nx] = True
+                queue.append((ny, nx))
 
-    if ice_cnt == 0:
-        answer = 0
-        break
+years = 0
+while icebergs:
+    decrease()
+    
+    # 빙산 덩어리 개수 확인
+    visited = [[False] * M for _ in range(N)]
+    count = 0
 
-    for y in range(N):
-        for x in range(M):
-            if matrix[y][x] > temp[y][x]:
-                matrix[y][x] -= temp[y][x]
-                temp[y][x] = 0
-            else:
-                matrix[y][x] = 0
-                temp[y][x] = 0
-    for y in range(N):
-        for x in range(M):
-            if matrix[y][x] > 0 and not visited[y][x]:
-                bfs(y, x)
+    for y, x in icebergs:
+        if not visited[y][x] and matrix[y][x] > 0:
+            bfs(y, x, visited)
+            count += 1
+            if count >= 2:  # 두 덩어리 이상이면 즉시 종료
+                print(years + 1)
+                exit(0)
 
-    # print("cnt:", cnt)
+    years += 1  # 1년 경과
 
-    if cnt >= 2:
-        answer = year
-        break
-
-
-print(answer)
+print(0)  # 다 녹았는데도 분리되지 않으면 0 출력
