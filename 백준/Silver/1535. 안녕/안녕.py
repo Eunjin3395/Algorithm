@@ -1,21 +1,11 @@
-from itertools import combinations
-
 N = int(input())
 minus = list(map(int, input().split()))
 plus = list(map(int, input().split()))
 
-mx = 0
+dp = [0] * 101  # 체력이 100 이하로 유지되도록 설정
 
-for n in range(1, N + 1):
-    for comb in combinations(range(0, N), n):
-        hp = 100
-        point = 0
-        for i in comb:
-            if hp - minus[i] <= 0:
-                point = 0
-                break
-            hp -= minus[i]
-            point += plus[i]
-        mx = max(mx, point)
+for i in range(N):
+    for j in range(100, minus[i] - 1, -1):  # 뒤에서부터 갱신 (중복 방지)
+        dp[j] = max(dp[j], dp[j - minus[i]] + plus[i])
 
-print(mx)
+print(dp[99])  # 최대 기쁨 출력
