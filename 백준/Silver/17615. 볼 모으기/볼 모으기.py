@@ -18,13 +18,12 @@ for i in range(b_last_idx, -1, -1):
     if color[i] == 'R':
         r_cnt1 += 1
 
+# R을 왼쪽에 두는 경우
 # 앞에서부터 뒤로, B의 첫 idx ~ 마지막까지에서의 R의 개수
 r_cnt2 = 0
 for i in range(b_idx, N):
     if color[i] == 'R':
         r_cnt2 += 1
-
-# print(r_cnt)
 
 # B를 오른쪽에 두는 경우
 # 뒤에서부터 앞으로, R의 마지막 idx ~ 0번째까지에서 B의 개수
@@ -34,12 +33,12 @@ for i in range(r_last_idx, -1, - 1):
     if color[i] == 'B':
         b_cnt1 += 1
 
+# B를 왼쪽에 두는 경우
 # 앞에서부터 뒤로, R의 첫 idx ~ 마지막까지에서의 B의 개수
 b_cnt2 = 0
-for i in range(b_idx, N):
+for i in range(r_idx, N):
     if color[i] == 'B':
         b_cnt2 += 1
 
-# print(b_cnt)
-
+# print(r_cnt1, r_cnt2, b_cnt1, b_cnt2)
 print(min(r_cnt1, r_cnt2, b_cnt1, b_cnt2))
