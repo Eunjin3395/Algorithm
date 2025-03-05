@@ -4,14 +4,14 @@ R, C = map(int, input().split())
 matrix = [list(map(int, input().split())) for _ in range(R)]
 
 # 치즈가 아예 없는 경우 예외 처리
-cheese = 0
-for row in matrix:
-    cheese += sum(row)
+# cheese = 0
+# for row in matrix:
+#     cheese += sum(row)
 
-if not cheese:
-    print(0)
-    print(0)
-    exit()
+# if not cheese:
+#     print(0)
+#     print(0)
+#     exit()
 
 dy = [1, 0, -1, 0]
 dx = [0, -1, 0, 1]
