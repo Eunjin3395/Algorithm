@@ -1,9 +1,11 @@
+import sys
+input = sys.stdin.readline
+
 R, C, Q = map(int, input().split())
 
 matrix = [list(map(int, input().split())) for _ in range(R)]
 
 # dp[r2][c2]-dp[r2][c1-1]-dp[r1-1][c2]+dp[r1-1][c1-1]
-
 # dp[r][c]: (0,0)부터 (r,c)까지의 누적합
 dp = [[0] * (C + 1) for _ in range(R + 1)]
 # 1열 초기화
