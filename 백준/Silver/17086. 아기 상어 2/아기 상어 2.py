@@ -1,45 +1,38 @@
 from collections import deque
 
 N, M = map(int, input().split())
-
 matrix = [list(map(int, input().split())) for _ in range(N)]
 
-# bfs로 1이 나올 때까지 거리 재가면서 탐색
 dy = [1, 0, -1, 0, -1, -1, 1, 1]
 dx = [0, 1, 0, -1, -1, 1, -1, 1]
 
-answer = 0
+# 거리 저장 배열
+dist = [[-1] * M for _ in range(N)]
+q = deque()
 
-def bfs(y, x):
-    global answer
-    q = deque()
-    visited = [[False] * M for _ in range(N)]
-    q.append((y, x, 0))
-    visited[y][x] = True
-
-    while q:
-        y, x, d = q.popleft()
-        if matrix[y][x] == 1:
-            answer = max(answer, d)
-            return
-
-        for i in range(8):
-            ny = y + dy[i]
-            nx = x + dx[i]
-
-            if ny < 0 or nx < 0 or ny >= N or nx >= M:
-                continue
-
-            if visited[ny][nx]:
-                continue
-
-            q.append((ny, nx, d + 1))
-            visited[ny][nx] = True
-
-
+# 1인 위치를 모두 큐에 넣고, 거리 0으로 설정
 for i in range(N):
     for j in range(M):
-        bfs(i, j)
-        # print("(", i, ",", j, "): ", answer)
+        if matrix[i][j] == 1:
+            q.append((i, j))
+            dist[i][j] = 0
+
+# BFS 시작
+while q:
+    y, x = q.popleft()
+
+    for i in range(8):
+        ny = y + dy[i]
+        nx = x + dx[i]
+
+        if 0 <= ny < N and 0 <= nx < M and dist[ny][nx] == -1:
+            dist[ny][nx] = dist[y][x] + 1
+            q.append((ny, nx))
+
+# 0 위치들의 거리 중 최댓값 출력
+answer = 0
+for i in range(N):
+    for j in range(M):
+        answer = max(answer, dist[i][j])
 
 print(answer)
