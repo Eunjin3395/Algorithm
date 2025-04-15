@@ -1,25 +1,13 @@
-N = int(input())
+n = int(input())
 arr = list(map(int, input().split()))
-X = int(input())
+x = int(input())
 
-_dict = {}
+visited = set()
+count = 0
 
-for elem in arr:
-    if elem in _dict:
-        _dict[elem] += 1
-    else:
-        _dict[elem] = 1
+for num in arr:
+    if x - num in visited:
+        count += 1
+    visited.add(num)
 
-# print(_dict)
-
-# 이분탐색?
-answer = 0
-for key in _dict.keys():
-    if X - key in _dict:
-        if 2 * key == X:
-            if _dict[X - key] > 1:
-                answer += 1
-        else:
-            answer += 1
-
-print(answer // 2)
+print(count)
