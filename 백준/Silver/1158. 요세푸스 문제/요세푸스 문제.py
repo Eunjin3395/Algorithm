@@ -1,29 +1,23 @@
-import sys
+from collections import deque
 
-def func(queue,k):
-    result = []
-    num = k-1
-    for i in range(len(queue)):
-        if(num<len(queue)):
-            result.append(queue.pop(num))
-            num+=k-1
-        elif(num>=len(queue)):
-            num=num%len(queue)
-            result.append(queue.pop(num))
-            num+=k-1
-    return result
+N, K = map(int, input().split())
 
-N,k = map(int,sys.stdin.readline().rstrip().split())
-queue=[]
-for i in range(1,N+1):
-    queue.append(i)
+arr = [i for i in range(1, N + 1)]
 
+q = deque(arr)
 
-result = func(queue,k)
-print("<",end="")
-for i in range(N):
-    if(i==N-1):
-        print(result[i],end="")
+t = 0
+answer = []
+
+# q에 남은 원소 있을 때까지
+while q:
+    n = q.popleft()
+    t += 1
+    if t == K:
+        answer.append(n)
+        t = 0
     else:
-        print(result[i],end=", ")
-print(">",end="")
+        q.append(n)
+
+
+print('<' + ', '.join(map(str, answer)) + '>')
