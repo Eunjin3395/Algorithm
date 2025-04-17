@@ -1,31 +1,35 @@
-arr=input()
-stack=[]
+string = input()
 
-answer=0
-tmp=1
-for i in range(len(arr)):
-    if arr[i] =='(':
-        stack.append(arr[i])
-        tmp *=2
-    elif arr[i] == '[':
-        stack.append(arr[i])
-        tmp *=3
-    elif arr[i] == ")":
+# (()[[]])([])
+# +2*2+2*3*3+2*3
+# 4 + 18 + 6
+
+stack = []
+mul = 1
+answer = 0
+for i in range(len(string)):
+    if string[i] == "(":
+        stack.append("(")
+        mul *= 2
+    elif string[i] == ")":
         if not stack or stack[-1] == "[":
-            answer = 0 # 실패
-            break
-        if arr[i-1] == "(":
-            answer += tmp
+            print(0)
+            exit()
+        if string[i - 1] == "(":
+            answer += mul
         stack.pop()
-        tmp //= 2  #tmp 초기화
+        mul //= 2
+    elif string[i] == '[':
+        stack.append('[')
+        mul *= 3
     else:
         if not stack or stack[-1] == "(":
-            answer=0
-            break
-        if arr[i-1] =='[':
-            answer+=tmp
+            print(0)
+            exit()
+        if string[i - 1] == "[":
+            answer += mul
         stack.pop()
-        tmp //=3 #tmp 초기화
+        mul //= 3
 
 if stack:
     print(0)
