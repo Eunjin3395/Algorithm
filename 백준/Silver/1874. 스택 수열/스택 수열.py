@@ -1,52 +1,31 @@
-N = int(input())
+import sys
+input = sys.stdin.readline
 
+N = int(input())
+arr = list(int(input()) for _ in range(N))
 
 stack = []
-stack.append(1)
-x = 1
+answer = []
+curr = 1
+possible = True
 
-result = []
-result.append("+")
+for i in range(N):
+    x = arr[i]
 
-for _ in range(N):
-    n = int(input())
-    # print("n:", n, ",stack:", stack, ", x:", x)
+    while curr <= x:
+        stack.append(curr)
+        answer.append("+")
+        curr += 1
 
-    if(stack):
-        if(stack[-1] < n):
-            if(x >= n):
-                print("NO")
-                exit()
-            else:
-                while(stack[-1] < n):
-                    x += 1
-                    stack.append(x)
-                    result.append("+")
-
-                stack.pop()
-                result.append("-")
-
-        else:
-            while(stack[-1] >= n):
-                stack.pop()
-                result.append("-")
-
-                if not stack:
-                    break
+    if stack[-1] == x:
+        stack.pop()
+        answer.append("-")
     else:
-        if(x >= n):
-            print("NO")
-            exit()
-        else:
-            x += 1
-            stack.append(x)
-            result.append("+")
-            while(stack[-1] < n):
-                x += 1
-                stack.append(x)
-                result.append("+")
+        possible = False
+        break
 
-            stack.pop()
-            result.append("-")
+if possible:
+    print('\n'.join(answer))
+else:
+    print("NO")
 
-print('\n'.join(result))
