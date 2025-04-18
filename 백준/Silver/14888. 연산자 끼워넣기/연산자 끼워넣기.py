@@ -1,46 +1,46 @@
-from itertools import permutations
-# 입력 받기
+import sys
 N = int(input())
 A = list(map(int, input().split()))
+count = list(map(int, input().split()))  # +, -, x, /
 
-count = {}
+total = []  # 전체 연산자 조합
 
-count["plus"], count["minus"], count["mult"], count["div"] = map(
-    int, (input().split()))
+def backtracking():
+    if len(arr) == N - 1:
+        total.append(tuple(arr))
+        return
 
-calc = []
-for key in count:
-    for _ in range(count[key]):
-        calc.append(key)
+    for i in range(4):
+        if count[i]:  # 해당 부호 선택할 수 있으면
+            count[i] -= 1
+            arr.append(i)
+            backtracking()
+            arr.pop()
+            count[i] += 1
 
-maxValue = -10**9
-minValue = 10**9
+arr = []
+backtracking()
 
-# 각 순열에 대해 값 계산
-for operator in set(permutations(calc)):
+mx = -sys.maxsize
+mn = sys.maxsize
+
+for calc in total:
     result = A[0]
-    for i in range(0, N-1):
-        if(operator[i] == "plus"):
-            result += A[i+1]
-            continue
-        if(operator[i] == "minus"):
-            result -= A[i+1]
-            continue
-        if(operator[i] == 'mult'):
-            result *= A[i+1]
-            continue
-        if(operator[i] == "div"):
-            if(result < 0):
-                result = -(abs(result)//A[i+1])
+    for i in range(N - 1):
+        if calc[i] == 0:
+            result += A[i + 1]
+        elif calc[i] == 1:
+            result -= A[i + 1]
+        elif calc[i] == 2:
+            result *= A[i + 1]
+        else:
+            if result < 0:
+                result = -((-result) // A[i + 1])
             else:
-                result = result//A[i+1]
+                result = result // A[i + 1]
+    mx = max(mx, result)
+    mn = min(mn, result)
 
-    # 최소값, 최대값 업데이트
-    if(result > maxValue):
-        maxValue = result
+print(mx)
+print(mn)
 
-    if(result < minValue):
-        minValue = result
-
-print(maxValue)
-print(minValue)
