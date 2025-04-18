@@ -1,21 +1,28 @@
 import sys
-K,N=map(int,sys.stdin.readline().rstrip().split())
+input = sys.stdin.readline
 
-li = [int(sys.stdin.readline().rstrip()) for _ in range(K)]
+K, N = map(int, input().split())
+length = [int(input()) for _ in range(K)]
 
-start=1
-end=max(li)
+# 랜선의 길이를 n으로 설정하면 N개의 조각이 나오는지 여부
+def able(n):
+    cnt = 0
+    for x in length:
+        cnt += x // n
+    return cnt >= N
 
-while(start<=end):
-    mid=(start+end)//2
-    num=0
+left = 1
+right = 2**31 - 1
+ans = -1
 
-    for elem in li:
-        num+=elem//mid # 각 랜선 분할 시 나오는 개수
-    
-    if(num>=N): # 현재 값으로는 분할 가능하다는 의미 -> 더 큰 수에서 탐색해야함
-      start= mid+1
+while left <= right:
+    mid = (left + right) // 2
+
+    if able(mid):
+        left = mid + 1
+        ans = mid
     else:
-      end=mid-1
+        right = mid - 1
 
-print(end)
+
+print(ans)
