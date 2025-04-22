@@ -72,7 +72,7 @@ jobs:
             -H "Content-Type: application/json" \
             --data '{
               "filter": {
-                "property": "제목",
+                "property": "문제 번호",
                 "title": {
                   "equals": "'"$PROBLEM_NO"'"
                 }
