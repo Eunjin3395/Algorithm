@@ -1,0 +1,104 @@
+name: PR Emoji & Notion Update by Author
+
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+
+jobs:
+  update-notion-checkbox:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR title and body, then update author-specific checkbox
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+        run: |
+          echo "🔍 시작: PR 제목과 본문 확인"
+
+          PR_TITLE=$(jq -r .pull_request.title "$GITHUB_EVENT_PATH")
+          PR_BODY=$(jq -r .pull_request.body "$GITHUB_EVENT_PATH")
+          PR_AUTHOR=$(jq -r .pull_request.user.login "$GITHUB_EVENT_PATH")
+
+          echo "📌 PR Title: $PR_TITLE"
+          # echo "📝 PR Body: $PR_BODY"
+          echo "👤 작성자: $PR_AUTHOR"
+
+          # ✅ 및 ❌ 이모지 감지
+          HAS_CHECK=$(echo "$PR_BODY" | grep -q "✅" && echo "yes" || echo "no")
+          HAS_CROSS=$(echo "$PR_BODY" | grep -q "❌" && echo "yes" || echo "no")
+
+          if [[ "$HAS_CHECK" == "yes" && "$HAS_CROSS" == "yes" ]]; then
+            CHECKBOX_VALUE=false
+            echo "⚠️ 둘 다 포함 → false"
+          elif [[ "$HAS_CROSS" == "yes" ]]; then
+            CHECKBOX_VALUE=false
+            echo "❌ 포함 → false"
+          elif [[ "$HAS_CHECK" == "yes" ]]; then
+            CHECKBOX_VALUE=true
+            echo "✅ 포함 → true"
+          else
+            echo "⚠️ 이모지가 없어 스킵합니다."
+            exit 0
+          fi
+
+          # 작성자 → 체크박스 필드 매핑
+          case "$PR_AUTHOR" in
+            "Eunjin3395") FIELD_NAME="은진" ;;
+            "rimi3226") FIELD_NAME="효림" ;;
+            "KII1ua") FIELD_NAME="성윤" ;;
+            "kslvy") FIELD_NAME="경은" ;;
+            *)
+              echo "❌ 알 수 없는 작성자: $PR_AUTHOR"
+              exit 1
+              ;;
+          esac
+
+          echo "🧩 적용 대상 필드: $FIELD_NAME"
+
+          # PR 제목에서 BOJ 문제 번호 추출
+          PROBLEM_NO=$(echo "$PR_TITLE" | grep -oE '\[BOJ [0-9]+\]' | grep -oE '[0-9]+')
+          if [ -z "$PROBLEM_NO" ]; then
+            echo "❌ PR 제목에서 문제 번호를 찾을 수 없습니다."
+            exit 1
+          fi
+
+          echo "🔢 추출된 문제 번호: $PROBLEM_NO"
+
+          # Notion DB에서 제목 == 문제 번호인 페이지 검색
+          SEARCH_RESULT=$(curl -s -X POST "https://api.notion.com/v1/databases/$NOTION_DATABASE_ID/query" \
+            -H "Authorization: Bearer $NOTION_API_KEY" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            --data '{
+              "filter": {
+                "property": "제목",
+                "title": {
+                  "equals": "'"$PROBLEM_NO"'"
+                }
+              }
+            }')
+
+          PAGE_ID=$(echo "$SEARCH_RESULT" | jq -r '.results[0].id')
+
+          if [ "$PAGE_ID" = "null" ] || [ -z "$PAGE_ID" ]; then
+            echo "❌ Notion에서 제목이 $PROBLEM_NO인 페이지를 찾을 수 없습니다."
+            exit 1
+          fi
+
+          echo "✅ 대상 Notion 페이지 ID: $PAGE_ID"
+
+          # 작성자에 따라 해당 필드 체크박스만 업데이트
+          curl -X PATCH "https://api.notion.com/v1/pages/$PAGE_ID" \
+            -H "Authorization: Bearer $NOTION_API_KEY" \
+            -H "Notion-Version: 2022-06-28" \
+            -H "Content-Type: application/json" \
+            --data '{
+              "properties": {
+                "'"$FIELD_NAME"'": {
+                  "checkbox": '"$CHECKBOX_VALUE"'
+                }
+              }
+            }'
+
+          echo "🎉 Notion 업데이트 완료: $FIELD_NAME → $CHECKBOX_VALUE"
