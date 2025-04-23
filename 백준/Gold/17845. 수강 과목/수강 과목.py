@@ -2,6 +2,7 @@ import sys
 input = sys.stdin.readline
 
 # dp 배낭문제
+# 최대 공부시간을 넘지 않으면서 중요도의 합이 최대가 되도록 과목을 담는 문제
 N, K = map(int, input().split())
 score = [0]
 time = [0]
@@ -21,10 +22,4 @@ for i in range(1, K + 1):
         else:
             dp[i][j] = dp[i - 1][j]  # i번째 과목을 선택 안하는 경우
 
-# for row in dp:
-#     for elem in row:
-#         print(elem, end=" ")
-#     print()
-
 print(dp[K][N])
-
