@@ -2,15 +2,6 @@ import copy
 N = int(input())
 matrix = [list(map(int, input().split())) for _ in range(N)]
 
-# 가능한 y,x,d1,d2 조합 생성
-comb = []
-for x in range(1, N + 1):
-    for y in range(1, N + 1):
-        for d1 in range(1, N + 1):
-            for d2 in range(1, N + 1):
-                if x + d1 + d2 <= N and y - d1 >= 1 and y + d2 <= N:
-                    comb.append((x - 1, y - 1, d1, d2))
-
 def print_matrix(matrix):
     print("---")
     for row in matrix:
@@ -31,8 +22,6 @@ def get_value(x, y, d1, d2, matrix):
         if tx < x + d1:
             tx += 1
         ty -= 1
-    # print("n1:", n1)
-    # print_matrix(matrix)
 
     # 2번 구역
     tx = x + d1 + d2 + 1
@@ -44,8 +33,6 @@ def get_value(x, y, d1, d2, matrix):
         if tx > x + d1 + 1:
             tx -= 1
         ty -= 1
-    # print("n2:", n2)
-    # print_matrix(matrix)
 
     # 3번 구역
     tx = x - 1
@@ -57,8 +44,6 @@ def get_value(x, y, d1, d2, matrix):
         if tx < x + d2 - 1:
             tx += 1
         ty += 1
-    # print("n3:", n3)
-    # print_matrix(matrix)
 
     # 4번 구역
     tx = x + d1 + d2
@@ -70,8 +55,6 @@ def get_value(x, y, d1, d2, matrix):
         if tx > x + d2:
             tx -= 1
         ty += 1
-    # print("n4:", n4)
-    # print_matrix(matrix)
 
     for r in range(N):
         for c in range(N):
@@ -81,8 +64,14 @@ def get_value(x, y, d1, d2, matrix):
 
     return max(cnt) - min(cnt)
 
-# mat = copy.deepcopy(matrix)
-# print(get_value(2, 4, 2, 1, mat))
+# 가능한 y,x,d1,d2 조합 생성
+comb = []
+for x in range(1, N + 1):
+    for y in range(1, N + 1):
+        for d1 in range(1, N + 1):
+            for d2 in range(1, N + 1):
+                if x + d1 + d2 <= N and y - d1 >= 1 and y + d2 <= N:
+                    comb.append((x - 1, y - 1, d1, d2))
 
 # 각 조합에 대해 인구 값 구하기
 answer = 1e12
@@ -90,5 +79,5 @@ for x, y, d1, d2 in comb:
     mat = copy.deepcopy(matrix)
     val = get_value(x, y, d1, d2, mat)
     answer = min(answer, val)
-# print_matrix()
+
 print(answer)
