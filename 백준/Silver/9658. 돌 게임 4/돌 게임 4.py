@@ -22,11 +22,7 @@ dp[3] = "SK"
 
 for i in range(4, N):
     v1, v3, v4 = dp[i - 1], dp[i - 3], dp[i - 4]
-    if v1 == "CY":
-        dp[i] = "SK"
-    elif v3 == "CY":
-        dp[i] = "SK"
-    elif v4 == "CY":
+    if v1 == "CY" or v3 == "CY" or v4 == "CY":
         dp[i] = "SK"
     else:
         dp[i] = "CY"
