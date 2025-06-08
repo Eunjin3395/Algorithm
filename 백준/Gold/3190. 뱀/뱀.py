@@ -1,64 +1,75 @@
 from collections import deque
 
-# d: 0(상), 1(우), 2(하), 3(좌)
-dy = [-1, 0, 1, 0]
-dx = [0, 1, 0, -1]
-rd = [1, 2, 3, 0]
-ld = [3, 0, 1, 2]
-
-
-def rotate(d_input):
-    global d
-    if d_input == "L":  # 왼쪽으로 90도 회전
-        nd = ld[d]
-    else:  # 오른쪽으로 90도 회전
-        nd = rd[d]
-    d = nd
-
-
 N = int(input())
 K = int(input())
 
-matrix = [[0]*N for _ in range(N)]
+matrix = [[0 for _ in range(N)] for _ in range(N)]
+
 for _ in range(K):
     y, x = map(int, input().split())
-    matrix[y-1][x-1] = 1
+    matrix[y - 1][x - 1] = 1
 
+cmd = deque()
 L = int(input())
-rotate_list = [[] for _ in range(10001)]
 for _ in range(L):
     x, c = input().split()
-    rotate_list[int(x)].append(c)
+    x = int(x)
+    cmd.append((x, c))
 
+rd = [1, 2, 3, 0]
+ld = [3, 0, 1, 2]
+dy = [-1, 0, 1, 0]  # 상,우,하,좌
+dx = [0, 1, 0, -1]
+
+def print_matrix():
+    for row in matrix:
+        for elem in row:
+            print(elem, end=" ")
+        print()
+
+def turn(c):
+    global d
+    if c == "L":
+        d = ld[d]
+    else:
+        d = rd[d]
+
+def move():
+    hy, hx = snake[0]
+    ny, nx = hy + dy[d], hx + dx[d]
+
+    if ny < 0 or ny >= N or nx < 0 or nx >= N:
+        return False
+    elif matrix[ny][nx] == -1:
+        return False
+
+    snake.appendleft((ny, nx))  # head 추가
+
+    if matrix[ny][nx] == 0:  # 사과가 없으면
+        ty, tx = snake.pop()
+        matrix[ty][tx] = 0  # 꼬리 삭제
+
+    matrix[ny][nx] = -1
+
+    # print_matrix()
+    return True
+
+d = 1  # 0,1,2,3 처음 방향은 오른쪽
 matrix[0][0] = -1
-d = 1  # 뱀의 방향
-snake = deque()  # 뱀의 좌표 덱
+snake = deque()
 snake.append((0, 0))
 
-for T in range(1, 10001):
-    # 머리 좌표 계산
-    y, x = snake[0]
-    hy = y+dy[d]
-    hx = x+dx[d]
+T = 1
+while True:
+    if not move():
+        break
 
-    # 벽과 부딪힘 여부
-    if hy < 0 or hy >= N or hx < 0 or hx >= N:
-        print(T)
-        exit()
-    # 자기자신과 부딪힘 여부
-    if matrix[hy][hx] == -1:
-        print(T)
-        exit()
+    if cmd:
+        if cmd[0][0] == T:
+            turn(cmd.popleft()[1])
 
-    # 머리 좌표 이동
-    apple = matrix[hy][hx]  # 사과 존재 여부 저장
-    matrix[hy][hx] = -1
-    snake.appendleft((hy, hx))
+    T += 1
 
-    if not apple:  # 이동한 칸에 사과가 없는 경우
-        ty, tx = snake.pop()
-        matrix[ty][tx] = 0
 
-    # 방향 전환
-    if rotate_list[T]:
-        rotate(rotate_list[T][0])
+print(T)
+
