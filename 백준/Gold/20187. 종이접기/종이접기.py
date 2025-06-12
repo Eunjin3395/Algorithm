@@ -15,6 +15,7 @@ dl = [1, 0, 3, 2]
 reverse = [dd, du, dr, dl]
 
 def print_matrix(mat):
+    # print("-----")
     for row in mat:
         for elem in row:
             print(elem, end=" ")
@@ -77,6 +78,7 @@ def func(c):
 
     matrix = temp_matrix
 
+cmd = cmd[::-1]
 for c in cmd:
     func(c)
 
