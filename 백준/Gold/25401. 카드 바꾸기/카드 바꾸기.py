@@ -10,9 +10,11 @@ for i in range(N):
         # 공차 계산
         diff = A[j] - A[i]
         dist = j - i
+
         # 정수 공차 아니면 건너뜀
         if diff % dist != 0:
             continue
+
         d = diff // dist
         # 첫 항 계산
         a1 = A[i] - d * i
