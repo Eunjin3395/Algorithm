@@ -1,75 +1,53 @@
-import sys
+N = int(input())
 
-global countM
-global count0
-global count1
+matrix = [list(map(int, input().split())) for _ in range(N)]
+answer = [0, 0, 0]  # -1, 0, 1
 
+def print_matrix(mat):
+    for row in mat:
+        for elem in row:
+            print(elem, end=" ")
+        print()
 
+def count(matrix):
+    count0 = 0
+    count1 = 0
+    count2 = 0
 
+    for y in range(len(matrix)):
+        for x in range(len(matrix[y])):
+            if matrix[y][x] == 0:
+                count0 += 1
+            elif matrix[y][x] == 1:
+                count1 += 1
+            else:
+                count2 += 1
 
-def divide(n, sX,sY,eX,eY):
-    
-    global countM
-    global count0
-    global count1
+    return count0, count1, count2
 
-    isM,is0,is1=0,0,0
+def divide(matrix, n):
+    c0, c1, c2 = count(matrix)
+    if (c0 != 0 and c1 == 0 and c2 == 0):  # 0으로만 이루어진 경우
+        answer[1] += 1
+    elif (c1 != 0 and c0 == 0 and c2 == 0):  # 1로만 이루어진 경우
+        answer[2] += 1
+    elif (c2 != 0 and c0 == 0 and c1 == 0):  # -1로만 이루어진 경우
+        answer[0] += 1
+    else:  # 숫자 섞여있는 경우
+        k = n // 3
+        for y in range(0, n, k):  # 구간
+            for x in range(0, n, k):
+                temp_matrix = [[] for _ in range(k)]  # 쪼갠 부분 matrix
+                for i in range(k):
+                    for j in range(k):
+                        temp_matrix[i].append(matrix[y + i][x + j])
 
-    for r in range(sX,eX):
-        if(-1 in matrix[r][sY:eY]):
-            isM=1
-        if( 0 in matrix[r][sY:eY]):
-            is0=1
-        if(1 in matrix[r][sY:eY]):
-            is1=1
-    
-    if(isM and not is0 and not is1):
-        countM+=1
-        return 0
-    if(not isM and is0 and not is1):
-        count0+=1
-        return 0
-    if(not isM and not is0 and is1):
-        count1+=1
-        return 0
-
-    if(sX+1==eX and sY+1==eY): # 요소가 하나만 남았을 경우
-        if(matrix[sX][sY]==-1):
-            countM+=1
-        elif(matrix[sX][sY]==0):
-            count0+=1
-        else:
-            count1+=1
-        return 0
-    
-
-
-    M=int(n/3)
-
-    divide(M,sX,sY,sX+M,sY+M)
-    divide(M,sX,sY+M,sX+M,sY+2*M)
-    divide(M,sX,sY+2*M,sX+M,sY+3*M)
-
-    divide(M,sX+M,sY,sX+2*M,sY+M)
-    divide(M,sX+M,sY+M,sX+2*M,sY+2*M)
-    divide(M,sX+M,sY+2*M,sX+2*M,sY+3*M)
-
-    divide(M,sX+2*M,sY,sX+3*M,sY+M)
-    divide(M,sX+2*M,sY+M,sX+3*M,sY+2*M)
-    divide(M,sX+2*M,sY+2*M,sX+3*M,sY+3*M)
+                divide(temp_matrix, k)
 
 
-N = int(sys.stdin.readline())
+divide(matrix, N)
 
-matrix = [list(map(int,sys.stdin.readline().split()))for _ in range(N)]
+print(answer[0])
+print(answer[1])
+print(answer[2])
 
-countM=0
-count0=0
-count1=0
-
-divide(N,0,0,N,N)
-
-print(countM)
-print(count0)
-print(count1)
-        
