@@ -1,29 +1,35 @@
 import sys
+from collections import deque
+input = sys.stdin.readline
 
-stack1 = list(sys.stdin.readline().rstrip())
-stack2 = []
+start_str = input().strip()
+M = int(input())
 
-N = int(sys.stdin.readline())
+# 커서 기준 왼쪽 문자열, 오른쪽 문자열 각각에 대한 큐
+left = deque()
+right = deque()
 
-for i in range(N):
-    command = sys.stdin.readline().rstrip()
-    if(command == "L"):
-      if(stack1):
-        char = stack1.pop()
-        stack2.append(char)
+for st in start_str:
+    left.append(st)
 
-    elif(command =="D"):
-      if(stack2):
-        char = stack2.pop()
-        stack1.append(char)
+for _ in range(M):
+    cmds = list(input().split())
+    cmd = cmds[0]
 
-    elif(command =="B"):
-      if(stack1):
-        stack1.pop()
-
+    if cmd == "L":  # 커서 왼쪽 이동
+        if left:
+            right.appendleft(left.pop())
+    elif cmd == "D":  # 커서 오른쪽 이동
+        if right:
+            left.append(right.popleft())
+    elif cmd == "B":
+        if left:
+            left.pop()
     else:
-      x = command.split()[1]
-      stack1.append(x)
+        st = cmds[1]
+        left.append(st)
 
-stack1.extend(reversed(stack2))
-print(''.join(stack1))
+for elem in left:
+    print(elem, end="")
+for elem in right:
+    print(elem, end="")
