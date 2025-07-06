@@ -26,7 +26,6 @@ for st in start:
 
 while q:
     node, d = q.popleft()
-    # print("-- node:", node, ", d:", d, "--")
 
     for adj_node in adj_list[node]:
         if believed[adj_node] >= 0:
@@ -34,10 +33,8 @@ while q:
 
         adj_believed[adj_node] += 1
 
-        if adj_believed[adj_node] * 2 >= len(adj_list[adj_node]):  # 인접 노드의 절반 이상이 루머 믿으면 자신도 믿음
+        if adj_believed[adj_node] >= len(adj_list[adj_node]) / 2:  # 인접 노드의 절반 이상이 루머 믿으면 자신도 믿음
             believed[adj_node] = d + 1
             q.append((adj_node, d + 1))
-        # print(adj_believed)
-        # print("believed:", believed)
 
 print(*believed[1:])
