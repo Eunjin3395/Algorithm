@@ -1,5 +1,4 @@
 import sys
-import math
 from collections import deque
 input = sys.stdin.readline
 
@@ -11,12 +10,7 @@ def valid(curr, target):
     cy, cx, cr = circles[curr]
     ty, tx, tr = circles[target]
 
-    dist = math.sqrt((cy - ty)**2 + (cx - tx)**2)
-
-    if dist <= cr + tr:
-        return True
-    else:
-        return False
+    return (cy - ty)**2 + (cx - tx)**2 <= (cr + tr)**2
 
 # bfs로 주어진 R거리 안에 있는 원을 대상으로 큐에 넣기
 def bfs(c):
@@ -26,14 +20,13 @@ def bfs(c):
     while q:
         curr = q.popleft()
 
-        visited[curr] = True
-
         for i in range(N):
             if curr == i:
                 continue
 
             if not visited[i] and valid(curr, i):
                 q.append(i)
+                visited[i] = True
 
 
 for _ in range(T):
