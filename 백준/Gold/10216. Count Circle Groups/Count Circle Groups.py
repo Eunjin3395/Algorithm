@@ -1,48 +1,35 @@
 import sys
-from collections import deque
 input = sys.stdin.readline
 
+sys.setrecursionlimit(10000)
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def union(x, y):
+    x_root = find(x)
+    y_root = find(y)
+    if x_root != y_root:
+        parent[y_root] = x_root
+
+def is_connected(i, j):
+    x1, y1, r1 = circles[i]
+    x2, y2, r2 = circles[j]
+    return (x1 - x2) ** 2 + (y1 - y2) ** 2 <= (r1 + r2) ** 2
+
 T = int(input())
-# 연결 요소의 개수 세기
-
-# curr의 원 반경 안에 target이 포함되는지 여부
-def valid(curr, target):
-    cy, cx, cr = circles[curr]
-    ty, tx, tr = circles[target]
-
-    return (cy - ty)**2 + (cx - tx)**2 <= (cr + tr)**2
-
-# bfs로 주어진 R거리 안에 있는 원을 대상으로 큐에 넣기
-def bfs(c):
-    q = deque()
-    q.append(c)
-
-    while q:
-        curr = q.popleft()
-
-        for i in range(N):
-            if curr == i:
-                continue
-
-            if not visited[i] and valid(curr, i):
-                q.append(i)
-                visited[i] = True
-
-
 for _ in range(T):
     N = int(input())
+    circles = [tuple(map(int, input().split())) for _ in range(N)]
 
-    circles = []
-    for _ in range(N):
-        x, y, r = map(int, input().split())
-        circles.append((x, y, r))
-
-    visited = [False] * N
-    answer = 0
+    parent = list(range(N))
 
     for i in range(N):
-        if not visited[i]:
-            bfs(i)
-            answer += 1
+        for j in range(i + 1, N):
+            if is_connected(i, j):
+                union(i, j)
 
-    print(answer)
+    groups = set(find(i) for i in range(N))
+    print(len(groups))
