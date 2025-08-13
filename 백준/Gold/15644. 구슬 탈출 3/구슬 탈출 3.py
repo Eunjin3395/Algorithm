@@ -44,27 +44,8 @@ def bfs(ry, rx, by, bx):
             continue
 
         for dy, dx, ds in dd:  # 4가지 방향에 대해 굴리는 경우의 수 탐색
-            # 어느 구슬을 먼저 굴릴지 결정
-            first_red = True
-            if dy != 0:  # 상하 기울이기
-                if crx == cbx:  # 같은 행에 있으면
-                    if dy == -1:  # 위로
-                        first_red = (cry < cby)
-                    else:
-                        first_red = (cry > cby)
-            else:  # 좌우 기울이기
-                if cry == cby:  # 같은 열에 있으면
-                    if dx == -1:  # 왼쪽으로
-                        first_red = (crx < cby)
-                    else:
-                        first_red = (crx > cby)
-
-            if first_red:
-                nry, nrx, r_hole, r_dist = move(cry, crx, dy, dx)
-                nby, nbx, b_hole, b_dist = move(cby, cbx, dy, dx)
-            else:
-                nby, nbx, b_hole, b_dist = move(cby, cbx, dy, dx)
-                nry, nrx, r_hole, r_dist = move(cry, crx, dy, dx)
+            nry, nrx, r_hole, r_dist = move(cry, crx, dy, dx)
+            nby, nbx, b_hole, b_dist = move(cby, cbx, dy, dx)
 
             # 파란 구슬 빠진 경우
             if b_hole:
