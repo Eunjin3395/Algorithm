@@ -3,30 +3,34 @@ input = sys.stdin.readline
 
 N = int(input())
 
-# 주어진 입력에는 중복이 있을 수 있지만, 출력은 중복이 없어야 한다.
-# 같은 depth에 대해서는 같은 원소 고르면 안된다.
+# 백트래킹으로 가능한 모든 문자열을 set에 넣기
+def backtracking():
+    global string
 
-def backtracking(n):
-    if len(arr) == M:
-        print(''.join(arr))
+    if len(string) == len(word):
+        print(''.join(string))
         return
 
-    prev = -1
-    for i in range(M):
-        if string[i] == prev or visited[i]:
-            continue
-        arr.append(string[i])
-        visited[i] = True
-        prev = string[i]
-        backtracking(i + 1)
-        arr.pop()
-        visited[i] = False
+    for key in cnt:
+        if cnt[key]:
+            string.append(key)
+            cnt[key] -= 1
+
+            backtracking()
+
+            string.pop()
+            cnt[key] += 1
 
 
 for _ in range(N):
-    string = list(input().strip())
-    string.sort()
-    M = len(string)
-    arr = []
-    visited = [False] * M
-    backtracking(0)
+    word = sorted(list(input().strip()))  # 사전순 출력을 위해 정렬
+    string = []
+    cnt = {}  # 알파벳별 개수 dict
+
+    for char in word:
+        if char in cnt:
+            cnt[char] += 1
+        else:
+            cnt[char] = 1
+
+    backtracking()
