@@ -11,13 +11,11 @@ for i in range(len(S)):
         _dict[S[i:j]] = True
 
 # dp?
-MAX = sys.maxsize
-
 # dp[i]: P[i]를 만드는데 드는 최소 사용횟수
 # dp[i] = min(dp[i],dp[j-1]+1), j는 문자열 쪼개는 기준점
+MAX = sys.maxsize
 dp = [MAX] * len(P)
-if P[0] in _dict:
-    dp[0] = 1
+dp[0] = 1
 
 for i in range(len(P)):
     if P[:i + 1] in _dict:  # 0~i번째 전체 문자열을 한번의 copy로 가능한 경우
@@ -26,8 +24,6 @@ for i in range(len(P)):
 
     for j in range(1, i + 1):  # 0~i 문자열을 두 부분으로 쪼개서 dp 점화식
         part = P[j:i + 1]
-        # print(P[:j], P[j:i + 1])
-        # print("j:", j, ", left:", part)
         if part in _dict:
             dp[i] = min(dp[i], dp[j - 1] + 1)
 
