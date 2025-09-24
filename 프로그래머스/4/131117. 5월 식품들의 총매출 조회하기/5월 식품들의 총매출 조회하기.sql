@@ -1,13 +1,7 @@
--- 코드를 입력하세요
-with subquery as(
-    SELECT product_id, sum(amount) as total_amount
-    from FOOD_ORDER
-    where PRODUCE_DATE between date('2022-05-01') and date('2022-05-31')
-    group by product_id
-)
-
-select f.PRODUCT_ID, f.PRODUCT_NAME, sb.total_amount * f.price as TOTAL_SALES
-from FOOD_PRODUCT f
-join subquery sb
-on f.product_id = sb.product_id
+select p.PRODUCT_ID, p.PRODUCT_NAME, sum(p.price * o.amount) as TOTAL_SALES
+from FOOD_PRODUCT p
+join FOOD_ORDER o
+on p.product_id = o.product_id
+where date_format(o.PRODUCE_DATE,"%Y-%m") ='2022-05'
+group by p.PRODUCT_ID
 order by 3 desc, 1
