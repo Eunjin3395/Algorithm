@@ -1,7 +1,6 @@
--- 코드를 입력하세요
-SELECT p.PRODUCT_CODE, sum(p.price * coalesce(s.sales_amount,0)) as SALES
+select PRODUCT_CODE, sum(p.price * s.sales_amount) as SALES
 from PRODUCT p
-left join OFFLINE_SALE s
-on p.product_id = s.product_id
-group by 1
+join OFFLINE_SALE s
+where p.product_id = s.product_id
+group by p.product_id
 order by 2 desc, 1
