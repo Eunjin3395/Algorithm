@@ -1,5 +1,4 @@
--- 코드를 입력하세요
-SELECT COUNT(*) AS USERS
-FROM USER_INFO
-WHERE YEAR(JOINED) = 2021
-AND AGE >= 20 AND AGE <=29
+select count(user_id) as USERS
+from user_info
+where age between 20 and 29
+and date_format(joined,'%Y')='2021'
