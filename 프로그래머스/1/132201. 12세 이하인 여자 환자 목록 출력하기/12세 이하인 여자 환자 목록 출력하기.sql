@@ -1,6 +1,4 @@
--- 코드를 입력하세요
-SELECT PT_NAME, PT_NO, GEND_CD, AGE, COALESCE(TLNO,'NONE') AS TLNO
-FROM PATIENT
-WHERE AGE <= 12
-AND GEND_CD='w'
-ORDER BY AGE DESC, PT_NAME ASC
+select PT_NAME, PT_NO, GEND_CD, AGE, IFNULL(TLNO,'NONE') as TLNO
+from PATIENT
+where age <=12 and gend_cd = 'W'
+order by age desc, pt_name asc
