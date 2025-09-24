@@ -1,5 +1,4 @@
--- 코드를 입력하세요
-SELECT ANIMAL_ID
-FROM ANIMAL_INS
-WHERE NAME IS NOT NULL
-ORDER BY 1
+select animal_id
+from animal_ins
+where name is not null
+order by 1
