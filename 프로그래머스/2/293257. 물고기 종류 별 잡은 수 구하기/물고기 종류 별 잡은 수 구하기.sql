@@ -1,15 +1,6 @@
-# SELECT 
-#     COALESCE(COUNT(fi.ID),0) AS FISH_COUNT,
-#     fni.FISH_NAME
-# FROM FISH_NAME_INFO fni
-# LEFT JOIN FISH_INFO fi
-# ON fni.FISH_TYPE = fi.FISH_TYPE
-# GROUP BY 2
-# ORDER BY 1 DESC;
-
-SELECT COUNT(*) AS FISH_COUNT, FISH_NAME
-FROM FISH_INFO A
-JOIN FISH_NAME_INFO B
-  ON A.FISH_TYPE = B.FISH_TYPE
-GROUP BY FISH_NAME
-ORDER BY 1 DESC
+select count(fish_name) as FISH_COUNT, FISH_NAME
+from FISH_INFO i 
+join FISH_NAME_INFO n
+on i.fish_type = n.fish_type
+group by fish_name
+order by 1 desc
