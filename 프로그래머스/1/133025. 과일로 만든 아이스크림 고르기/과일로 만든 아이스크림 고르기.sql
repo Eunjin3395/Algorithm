@@ -1,8 +1,8 @@
--- 코드를 입력하세요
-SELECT FLAVOR
-FROM FIRST_HALF
-WHERE TOTAL_ORDER > 3000
-AND FLAVOR IN (SELECT FLAVOR
-    FROM ICECREAM_INFO
-    WHERE INGREDIENT_TYPE = 'fruit_based')
-ORDER BY TOTAL_ORDER DESC
+select h.flavor
+from FIRST_HALF h
+join ICECREAM_INFO i
+on h.flavor = i.flavor
+where i.ingredient_type = 'fruit_based'
+group by h.flavor
+having sum(h.total_order)>3000
+order by sum(h.total_order) desc
