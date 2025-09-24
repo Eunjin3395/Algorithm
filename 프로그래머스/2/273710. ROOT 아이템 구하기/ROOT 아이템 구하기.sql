@@ -1,7 +1,6 @@
--- 코드를 작성해주세요
-SELECT i.ITEM_ID, i.ITEM_NAME
-FROM ITEM_INFO as i
-JOIN ITEM_TREE as t
-ON i.ITEM_ID = t.ITEM_ID
-WHERE t.PARENT_ITEM_ID IS NULL
-ORDER BY 1
+select i.ITEM_ID, i.ITEM_NAME
+from ITEM_INFO i
+join ITEM_TREE t
+on i.item_id = t.item_id
+where t.PARENT_ITEM_ID is null
+order by 1
