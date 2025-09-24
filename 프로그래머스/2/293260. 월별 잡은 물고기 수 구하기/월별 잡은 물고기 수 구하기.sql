@@ -1,6 +1,6 @@
--- 코드를 작성해주세요
-SELECT COUNT(*) as FISH_COUNT, MONTH(TIME) as MONTH
-from fish_info
+# 월별 잡은 물고기 수
+select count(id) as FISH_COUNT, month(time) as MONTH
+from FISH_INFO
 group by month(time)
-having count(*) >0
+having count(*)>0
 order by 2
