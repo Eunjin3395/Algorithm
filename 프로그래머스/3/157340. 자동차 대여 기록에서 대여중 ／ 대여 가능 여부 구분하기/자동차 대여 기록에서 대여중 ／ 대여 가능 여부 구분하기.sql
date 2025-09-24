@@ -1,16 +1,18 @@
--- 코드를 입력하세요
-with subquery as (
-select distinct(car_id)
-from CAR_RENTAL_COMPANY_RENTAL_HISTORY
-where date(end_date) >= date('2022-10-16')
-    and date(start_date) <= date('2022-10-16')
+# 각 history마다 2022-10-16일자가 포함되는 구간인지 여부
+with SUB_TBL as(
+    select car_id, 
+        case 
+            when '2022-10-16' between start_date and end_date then 1
+            else 0
+        end as valid
+    from CAR_RENTAL_COMPANY_RENTAL_HISTORY
 )
-    
-select car_id,
+
+select CAR_ID, 
     case
-        when car_id in (select * from subquery) then '대여중'
+        when sum(valid) >0 then '대여중'
         else '대여 가능'
-        end as AVAILABILITY
-from CAR_RENTAL_COMPANY_RENTAL_HISTORY
-group by car_id
+    end as AVAILABILITY
+from SUB_TBL
+group by CAR_ID
 order by 1 desc
