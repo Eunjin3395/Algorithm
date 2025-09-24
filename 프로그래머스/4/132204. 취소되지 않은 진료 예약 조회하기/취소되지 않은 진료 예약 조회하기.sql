@@ -1,10 +1,8 @@
--- 코드를 입력하세요
-SELECT a.APNT_NO, p.PT_NAME, p.PT_NO, a.MCDP_CD, d.DR_NAME, a.APNT_YMD
-FROM APPOINTMENT as a
-JOIN DOCTOR as d
-ON a.MDDR_ID = d.DR_ID
-JOIN PATIENT as p
-ON p.PT_NO = a.PT_NO
-WHERE a.APNT_CNCL_YN = 'N'
-AND DATE(a.APNT_YMD) = '2022-04-13'
-ORDER BY a.APNT_YMD
+select a.APNT_NO, p.PT_NAME, p.PT_NO, d.MCDP_CD, d.DR_NAME, a.APNT_YMD
+from APPOINTMENT a
+join DOCTOR d
+on a.MDDR_ID = d.DR_ID
+join PATIENT p 
+on a.PT_NO = p.PT_NO
+where a.MCDP_CD='CS' and date_format(a.APNT_YMD,"%Y-%m-%d") = '2022-04-13' and a.APNT_CNCL_YN = 'N'
+order by 6
