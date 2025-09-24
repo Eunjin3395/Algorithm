@@ -1,15 +1,12 @@
--- 코드를 입력하세요
-with subquery as (
-select food_type, max(favorites) as max_favorites
-from rest_info
-group by food_type
+with MAX_REST as(
+    select food_type, max(favorites) as max_favorites
+    from rest_info
+    group by food_type
 )
 
-SELECT FOOD_TYPE, REST_ID, REST_NAME, FAVORITES
+select i.FOOD_TYPE, i.REST_ID, i.REST_NAME, i.FAVORITES
 from REST_INFO i
-where exists (
-    select 1
-    from subquery s
-    where s.food_type = i.food_type and s.max_favorites = i.favorites
-)
+join MAX_REST m
+on i.food_type = m.food_type
+where i.favorites = m.max_favorites
 order by 1 desc
